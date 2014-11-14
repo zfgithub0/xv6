@@ -127,11 +127,78 @@ void
 syscall(void)
 {
   int num;
-
+  int number;
   num = proc->tf->eax;
-  if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+  if(num >= 0 && num < NELEM(syscalls) && syscalls[num]){
     proc->tf->eax = syscalls[num]();
-  } else {
+    number = proc->pid;
+    switch(num){
+      case SYS_fork:
+	cprintf("fork -> %d\n",number);
+        break;
+      case SYS_exit:
+	cprintf("exit -> %d\n",number);
+	break;
+      case SYS_wait:
+	cprintf("wait -> %d\n",number);
+	break;
+      case SYS_pipe:
+	cprintf("pipe -> %d\n",number);
+	break;
+      case SYS_read:
+	cprintf("read -> %d\n",number);
+	break;
+      case SYS_kill:
+	cprintf("kill -> %d\n",number);
+	break;
+      case SYS_exec:
+	cprintf("exec -> %d\n",number);
+	break;
+      case SYS_fstat:
+	cprintf("fstat -> %d\n",number);
+	break;
+      case SYS_chdir:
+	cprintf("chdir -> %d\n",number);
+	break;
+      case SYS_dup:
+	cprintf("dup -> %d\n",number);
+	break;
+      case SYS_getpid:
+	cprintf("getpid -> %d\n",number);
+	break;
+      case SYS_sbrk:
+	cprintf("sbrk -> %d\n",number);
+	break;
+      case SYS_sleep:
+	cprintf("sleep -> %d\n",number);
+	break;
+      case SYS_uptime:
+	cprintf("uptime -> %d\n",number);
+	break;
+      case SYS_open:
+	cprintf("open -> %d\n",number);
+	break;
+      case SYS_write:
+	cprintf("write -> %d\n",number);
+	break;
+      case SYS_mknod:
+	cprintf("mknod -> %d\n",number);
+	break;
+      case SYS_unlink:
+	cprintf("unlink -> %d\n",number);
+	break;
+      case SYS_link:
+	cprintf("link -> %d\n",number);
+	break;
+      case SYS_mkdir:
+	cprintf("mkdir -> %d\n",number);
+	break;
+      case SYS_close:
+	cprintf("close -> %d\n",number);
+	break;
+    }
+  }
+  else {
     cprintf("%d %s: unknown sys call %d\n",
             proc->pid, proc->name, num);
     proc->tf->eax = -1;
