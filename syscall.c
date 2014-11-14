@@ -99,6 +99,7 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_halt(void);
+extern int sys_dup2(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -123,17 +124,18 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_halt]    sys_halt,
+[SYS_dup2]    sys_dup2,
 };
 
 void
 syscall(void)
 {
   int num;
-  int number;
   num = proc->tf->eax;
   if(num >= 0 && num < NELEM(syscalls) && syscalls[num]){
     proc->tf->eax = syscalls[num]();
-    number = proc->pid;
+    /*
+    int number = proc->pid;
     switch(num){
       case SYS_fork:
 	cprintf("fork -> %d\n",number);
@@ -199,6 +201,7 @@ syscall(void)
 	cprintf("close -> %d\n",number);
 	break;
     }
+    */
   }
   else {
     cprintf("%d %s: unknown sys call %d\n",

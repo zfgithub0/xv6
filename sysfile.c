@@ -440,3 +440,24 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+int
+sys_dup2(void)
+{
+  struct file *oldfile, *newfile;
+  int oldfd, newfd;
+
+  if(argfd(0, &oldfd, &oldfile) < 0){
+    return -1;
+  }
+
+  if(argfd(0, &newfd, &newfile) == 0){
+    fileclose(newfile);
+  }
+
+  if(oldfile != newfile){
+    filedup(oldfile);
+    proc->ofile[newfd] = proc->ofile[oldfd];
+  }
+  return newfd;
+}
